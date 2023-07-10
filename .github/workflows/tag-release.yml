@@ -1,14 +1,12 @@
-name: Dispatch CI
+name: Tag release
 
 on:
-  push
-  workflow_dispatch
+  push:
+  workflow_dispatch:
 
 jobs:
   tag-release:
     name: Tag release
-    # Only run cron on the silverstripe account
-    if: (github.event_name == 'schedule' && github.repository_owner == 'silverstripe') || (github.event_name != 'schedule')
     runs-on: ubuntu-latest
     steps:
       - name: Create tag and release
