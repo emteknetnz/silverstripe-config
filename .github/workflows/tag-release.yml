@@ -12,5 +12,5 @@ jobs:
       - name: Create tag and release
         uses: emteknetnz/gha-tag-release@main
         with:
-          tag: 2.0.8
+          tag: 2.0.9
           release: true
