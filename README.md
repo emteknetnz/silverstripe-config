@@ -4,7 +4,7 @@
 [![Silverstripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
 The aim of this is to implement the Silverstripe config system in a way that can be
-understood by many and to improve performance whilst keeping the powerful features.
+understood by many and to improve performance whilst keeping the powerful features..
 
 ## Installation
 
