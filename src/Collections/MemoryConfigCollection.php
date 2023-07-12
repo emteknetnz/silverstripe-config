@@ -2,16 +2,15 @@
 
 namespace SilverStripe\Config\Collections;
 
-use SilverStripe\Dev\Deprecation;
 use SilverStripe\Config\MergeStrategy\Priority;
 use SilverStripe\Config\Middleware\MiddlewareAware;
 use SilverStripe\Config\Transformer\TransformerInterface;
-use Serializable;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Basic mutable config collection stored in memory
  */
-class MemoryConfigCollection implements MutableConfigCollectionInterface, Serializable
+class MemoryConfigCollection implements MutableConfigCollectionInterface
 {
     use MiddlewareAware;
 
@@ -76,7 +75,7 @@ class MemoryConfigCollection implements MutableConfigCollectionInterface, Serial
         return $this;
     }
 
-    public function set($class, $name, $data, $metadata = [])
+    public function set(string $class, ?string $name, mixed $data, array $metadata = []): static
     {
         $this->saveMetadata($class, $metadata);
 
@@ -177,7 +176,7 @@ class MemoryConfigCollection implements MutableConfigCollectionInterface, Serial
         return true;
     }
 
-    public function remove($class, $name = null)
+    public function remove(string $class, ?string $name = null): static
     {
         $classKey = strtolower($class ?? '');
         if ($name) {
@@ -208,48 +207,11 @@ class MemoryConfigCollection implements MutableConfigCollectionInterface, Serial
         return $this->config;
     }
 
-    /**
-     * @deprecated 1.0.0 Use merge() instead
-     *
-     * Synonym for merge()
-     *
-     * @param string $class
-     * @param string $name
-     * @param mixed  $value
-     * @return $this
-     */
-    public function update($class, $name, $value)
+    public function merge(string $class, string|null $name, array $value): static
     {
-        if (class_exists(Deprecation::class)) {
-            Deprecation::notice('1.0.0', 'Use merge() instead');
-        } else {
-            user_error(__METHOD__ . ' is deprecated. Use merge() instead', E_USER_DEPRECATED);
-        }
-        $this->merge($class, $name, $value);
-        return $this;
-    }
-
-    /**
-     * @param string $class
-     * @param string $name
-     * @param array $value - non-array values are @deprecated 1.12.0
-     */
-    public function merge($class, $name, $value)
-    {
-        if (!is_array($value)) {
-            if (class_exists(Deprecation::class)) {
-                Deprecation::notice('1.12.0', 'Use set() if $value is not an array instead');
-            } else {
-                user_error(
-                    'Non-array values for the $value argument in ' . __METHOD__
-                    . ' are deprecated. Use set() if $value is not an array instead',
-                    E_USER_DEPRECATED
-                );
-            }
-        }
         // Detect mergeable config
         $existing = $this->get($class, $name, true);
-        if (is_array($value) && is_array($existing)) {
+        if (is_array($existing)) {
             $value = Priority::mergeArray($value, $existing);
         }
 
@@ -303,41 +265,6 @@ class MemoryConfigCollection implements MutableConfigCollectionInterface, Serial
         foreach ($this->getSerializedMembers() as $key) {
             $this->$key = isset($data[$key]) ? $data[$key] : null;
         }
-    }
-
-    /**
-     * The __serialize() magic method will be automatically used instead of this
-     *
-     * @return string
-     * @deprecated 1.12.0 Use __serialize() instead
-     */
-    public function serialize()
-    {
-        if (class_exists(Deprecation::class)) {
-            Deprecation::notice('1.12.0', 'Use __serialize() instead');
-        } else {
-            user_error(__METHOD__ . ' is deprecated. Use __serialize() instead', E_USER_DEPRECATED);
-        }
-        return serialize($this->__serialize());
-    }
-
-    /**
-     * The __unserialize() magic method will be automatically used instead of this almost all the time
-     * This method will be automatically used if existing serialized data was not saved as an associative array
-     * and the PHP version used in less than PHP 9.0
-     *
-     * @param string $serialized
-     * @deprecated 1.12.0 Use __unserialize() instead
-     */
-    public function unserialize($serialized)
-    {
-        if (class_exists(Deprecation::class)) {
-            Deprecation::notice('1.12.0', 'Use __unserialize() instead');
-        } else {
-            user_error(__METHOD__ . ' is deprecated. Use __unserialize() instead', E_USER_DEPRECATED);
-        }
-        $data = unserialize($serialized ?? '');
-        $this->__unserialize($data);
     }
 
     public function nest()
