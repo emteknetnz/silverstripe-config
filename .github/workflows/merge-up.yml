@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Merge-up
-        uses: emteknetnz/gha-merge-up@1
+        uses: emteknetnz/gha-merge-up@main
