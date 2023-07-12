@@ -5,7 +5,7 @@ on:
 
 jobs:
   keepalive:
-    name: Keepalive
+    name: Merge-up
     runs-on: ubuntu-latest
     steps:
       - name: Merge-up
