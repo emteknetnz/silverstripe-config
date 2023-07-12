@@ -82,6 +82,7 @@ class MemoryConfigCollection implements MutableConfigCollectionInterface, Serial
 
         $classKey = strtolower($class ?? '');
         if ($name) {
+            $this->checkForDeprecatedConfig($classKey, $name);
             if (!isset($this->config[$classKey])) {
                 $this->config[$classKey] = [];
             }
@@ -106,9 +107,23 @@ class MemoryConfigCollection implements MutableConfigCollectionInterface, Serial
 
         // Return either name, or whole-class config
         if ($name) {
+            $this->checkForDeprecatedConfig($class, $name);
             return isset($config[$name]) ? $config[$name] : null;
         }
         return $config;
+    }
+
+    public function checkForDeprecatedConfig($class, $name): void
+    {
+        $deprecated = $this->getClassConfig('__deprecated', true);
+        $data = $deprecated['config'][strtolower($class)][$name] ?? [];
+        if (!empty($data)) {
+            if (class_exists(Deprecation::class)) {
+                Deprecation::notice($data['version'], $data['message'], Deprecation::SCOPE_CONFIG);
+            } else {
+                user_error($data['message'], E_USER_DEPRECATED);
+            }
+        }
     }
 
     /**
@@ -205,13 +220,33 @@ class MemoryConfigCollection implements MutableConfigCollectionInterface, Serial
      */
     public function update($class, $name, $value)
     {
-        Deprecation::notice('1.0.0', 'Use merge() instead');
+        if (class_exists(Deprecation::class)) {
+            Deprecation::notice('1.0.0', 'Use merge() instead');
+        } else {
+            user_error(__METHOD__ . ' is deprecated. Use merge() instead', E_USER_DEPRECATED);
+        }
         $this->merge($class, $name, $value);
         return $this;
     }
 
+    /**
+     * @param string $class
+     * @param string $name
+     * @param array $value - non-array values are @deprecated 1.12.0
+     */
     public function merge($class, $name, $value)
     {
+        if (!is_array($value)) {
+            if (class_exists(Deprecation::class)) {
+                Deprecation::notice('1.12.0', 'Use set() if $value is not an array instead');
+            } else {
+                user_error(
+                    'Non-array values for the $value argument in ' . __METHOD__
+                    . ' are deprecated. Use set() if $value is not an array instead',
+                    E_USER_DEPRECATED
+                );
+            }
+        }
         // Detect mergeable config
         $existing = $this->get($class, $name, true);
         if (is_array($value) && is_array($existing)) {
@@ -278,7 +313,11 @@ class MemoryConfigCollection implements MutableConfigCollectionInterface, Serial
      */
     public function serialize()
     {
-        Deprecation::notice('1.12.0', 'Use __serialize() instead');
+        if (class_exists(Deprecation::class)) {
+            Deprecation::notice('1.12.0', 'Use __serialize() instead');
+        } else {
+            user_error(__METHOD__ . ' is deprecated. Use __serialize() instead', E_USER_DEPRECATED);
+        }
         return serialize($this->__serialize());
     }
 
@@ -292,7 +331,11 @@ class MemoryConfigCollection implements MutableConfigCollectionInterface, Serial
      */
     public function unserialize($serialized)
     {
-        Deprecation::notice('1.12.0', 'Use __unserialize() instead');
+        if (class_exists(Deprecation::class)) {
+            Deprecation::notice('1.12.0', 'Use __unserialize() instead');
+        } else {
+            user_error(__METHOD__ . ' is deprecated. Use __unserialize() instead', E_USER_DEPRECATED);
+        }
         $data = unserialize($serialized ?? '');
         $this->__unserialize($data);
     }

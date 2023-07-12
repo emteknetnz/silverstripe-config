@@ -3,6 +3,7 @@
 namespace SilverStripe\Config\Collections;
 
 use SilverStripe\Config\Middleware\DeltaMiddleware;
+use SilverStripe\Dev\Deprecation;
 
 /**
  * Applies config modifications as a set of deltas on top of the
@@ -145,9 +146,23 @@ class DeltaConfigCollection extends MemoryConfigCollection
             );
     }
 
+    /**
+     * @deprecated 1.6.0 Use __unserialize() instead
+     */
     public function unserialize($serialized)
     {
+        if (class_exists(Deprecation::class)) {
+            Deprecation::notice('1.6.0', 'Use __unserialize() instead');
+        } else {
+            user_error(__METHOD__ . ' is deprecated. Use __unserialize() instead', E_USER_DEPRECATED);
+        }
         parent::unserialize($serialized);
+        $this->postInit();
+    }
+
+    public function __unserialize(array $data): void
+    {
+        parent::__unserialize($data);
         $this->postInit();
     }
 
@@ -270,6 +285,11 @@ class DeltaConfigCollection extends MemoryConfigCollection
      */
     protected function addDelta($class, $delta)
     {
+        if (is_array($delta['config'] ?? null)) {
+            foreach (array_keys($delta['config']) as $configKey) {
+                $this->checkForDeprecatedConfig($class, $configKey);
+            }
+        }
         $classKey = strtolower($class ?? '');
         if (!isset($this->deltas[$classKey])) {
             $this->deltas[$classKey] = [];
