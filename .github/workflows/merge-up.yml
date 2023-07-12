@@ -1,0 +1,12 @@
+name: Merge-up
+
+on:
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    name: Keepalive
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge-up
+        uses: emteknetnz/merge-up@1
