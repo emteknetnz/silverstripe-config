@@ -3,7 +3,6 @@
 namespace SilverStripe\Config\Collections;
 
 use SilverStripe\Config\Middleware\DeltaMiddleware;
-use SilverStripe\Dev\Deprecation;
 
 /**
  * Applies config modifications as a set of deltas on top of the
@@ -146,20 +145,6 @@ class DeltaConfigCollection extends MemoryConfigCollection
             );
     }
 
-    /**
-     * @deprecated 1.6.0 Use __unserialize() instead
-     */
-    public function unserialize($serialized)
-    {
-        if (class_exists(Deprecation::class)) {
-            Deprecation::notice('1.6.0', 'Use __unserialize() instead');
-        } else {
-            user_error(__METHOD__ . ' is deprecated. Use __unserialize() instead', E_USER_DEPRECATED);
-        }
-        parent::unserialize($serialized);
-        $this->postInit();
-    }
-
     public function __unserialize(array $data): void
     {
         parent::__unserialize($data);
@@ -181,7 +166,7 @@ class DeltaConfigCollection extends MemoryConfigCollection
         $this->getDeltaMiddleware()->setCollection($this);
     }
 
-    public function set($class, $name, $data, $metadata = [])
+    public function set(string $class, ?string $name, mixed $data, array $metadata = []): static
     {
         // Check config to merge
         $this->clearDeltas($class, $name);
@@ -199,7 +184,7 @@ class DeltaConfigCollection extends MemoryConfigCollection
         return $this;
     }
 
-    public function remove($class, $name = null)
+    public function remove(string $class, ?string $name = null): static
     {
         // Check config to merge
         $this->clearDeltas($class, $name);
@@ -216,7 +201,7 @@ class DeltaConfigCollection extends MemoryConfigCollection
         return $this;
     }
 
-    public function merge($class, $name, $value)
+    public function merge(string $class, string|null $name, array $value): static
     {
         // Check config to merge
         if ($name) {

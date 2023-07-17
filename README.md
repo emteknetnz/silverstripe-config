@@ -4,7 +4,13 @@
 [![Silverstripe supported module](https://img.shields.io/badge/silverstripe-supported-0071C4.svg)](https://www.silverstripe.org/software/addons/silverstripe-commercially-supported-module-list/)
 
 The aim of this is to implement the Silverstripe config system in a way that can be
-understood by many and to improve performance whilst keeping the powerful features.
+understood by many and to improve performance whilst keeping the powerful features..
+
+## Installation
+
+```sh
+composer require silverstripe/config
+```
 
 # Documentation
 
@@ -16,5 +22,21 @@ understood by many and to improve performance whilst keeping the powerful featur
 * [Testing](docs/testing.md)
 * [Glossary](docs/glossary.md)
 
+
 .
 lorem ipsum
+
+My ENH change
+
+MY MNT change
+
+MY NEW change
+
+My MNT commit
+
+My ENH commit
+
+MY NEW commit
+
+MY NEW commit
+
