@@ -24,8 +24,7 @@ composer require silverstripe/config
 
 
 .
-
-...
+lorem ipsum
 
 My ENH change
 
@@ -40,3 +39,4 @@ My ENH commit
 MY NEW commit
 
 MY NEW commit
+
