@@ -8,4 +8,5 @@ on:
 jobs:
   ci:
     name: CI
-    uses: emteknetnz/gha-ci/.github/workflows/ci.yml@pulls/1/patch-emt
+    # uses: emteknetnz/gha-ci/.github/workflows/ci.yml@pulls/1/patch-emt
+    uses: emteknetnz/gha-ci/.github/workflows/ci.yml@1
