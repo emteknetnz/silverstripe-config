@@ -1,16 +1,16 @@
-name: Tag release
+# name: Tag release
 
-on:
-  push:
-  workflow_dispatch:
+# on:
+#   push:
+#   workflow_dispatch:
 
-jobs:
-  tag-release:
-    name: Tag release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create tag and release
-        uses: emteknetnz/gha-tag-release@main
-        with:
-          tag: 2.0.9
-          release: true
+# jobs:
+#   tag-release:
+#     name: Tag release
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Create tag and release
+#         uses: emteknetnz/gha-tag-release@main
+#         with:
+#           tag: 2.0.9
+#           release: true
