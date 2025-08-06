@@ -11,15 +11,20 @@ on:
         required: true
         type: choice
         options:
-          - current
-          - previous
+          - 'dynamic'
+          - 'current'
+          - 'next'
+          - 'previous'
+        default: 'dynamic'
       minor_type:
         description: 'Minor branch type'
         required: true
         type: choice
         options:
-          - next-patch
-          - next-minor    
+          - 'dynamic'
+          - 'next-patch'
+          - 'next-minor'
+        default: 'dynamic'
 
 jobs:
   dispatch-ci:
