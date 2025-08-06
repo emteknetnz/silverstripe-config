@@ -1,9 +1,25 @@
 name: Dispatch CI
 
 on:
-  # At 2:00 PM UTC, only on Tuesday and Wednesday
+  # At 2:00 PM UTC, only on Tuesday, Wednesday and Thursday
   schedule:
-    - cron: '0 14 * * 2,3'
+    - cron: '0 14 * * 2,3,4'
+  workflow_dispatch:
+    inputs:
+      major_type:
+        description: 'Major branch type'
+        required: true
+        type: choice
+        options:
+          - current
+          - previous
+      minor_type:
+        description: 'Minor branch type'
+        required: true
+        type: choice
+        options:
+          - next-patch
+          - next-minor    
 
 jobs:
   dispatch-ci:
@@ -13,4 +29,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Dispatch CI
-        uses: silverstripe/gha-dispatch-ci@v1
+        uses: emteknetnz/gha-dispatch-ci@main
