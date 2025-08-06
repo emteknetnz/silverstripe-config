@@ -35,3 +35,6 @@ jobs:
     steps:
       - name: Dispatch CI
         uses: emteknetnz/gha-dispatch-ci@main
+        with:
+          major_type: ${{ inputs.major_type }}
+          minor_type: ${{ inputs.minor_type }}
